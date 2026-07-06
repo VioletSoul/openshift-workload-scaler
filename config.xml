@@ -1,0 +1,162 @@
+<flow-definition plugin="workflow-job@1505.vea_4b_20a_4a_495_sb">
+
+    <actions>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2218.v56d0cda_37c72"/>
+
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2218.v56d0cda_37c72">
+            <jobProperties/>
+            <triggers/>
+            <parameters>
+                <string>environment</string>
+                <string>username</string>
+                <string>action</string>
+                <string>dryRun</string>
+                <string>password</string>
+            </parameters>
+            <options/>
+        </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+    </actions>
+
+    <description/>
+
+    <keepDependencies>false</keepDependencies>
+
+    <properties>
+
+        <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.13">
+            <siteName>https://jira.example.com</siteName>
+        </hudson.plugins.jira.JiraProjectProperty>
+
+        <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@166.vc82fc20b_a_ed6">
+            <useBuildBlocker>false</useBuildBlocker>
+            <blockLevel>GLOBAL</blockLevel>
+            <scanQueueFor>DISABLED</scanQueueFor>
+            <blockingJobs/>
+        </hudson.plugins.buildblocker.BuildBlockerProperty>
+
+        <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@332.va_1ee476d8f6d">
+            <autoRebuild>false</autoRebuild>
+            <rebuildDisabled>false</rebuildDisabled>
+        </com.sonyericsson.rebuild.RebuildSettings>
+
+        <com.synopsys.arc.jenkinsci.plugins.jobrestrictions.jobs.JobRestrictionProperty plugin="job-restrictions@212.vc34d63a_6704b_"/>
+
+        <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.16">
+            <maxConcurrentPerNode>0</maxConcurrentPerNode>
+            <maxConcurrentTotal>0</maxConcurrentTotal>
+            <categories class="java.util.concurrent.CopyOnWriteArrayList"/>
+            <throttleEnabled>false</throttleEnabled>
+            <throttleOption>project</throttleOption>
+            <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+            <paramsToUseForLimit/>
+            <configVersion>1</configVersion>
+        </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+
+        <jenkins.model.BuildDiscarderProperty>
+            <strategy class="hudson.tasks.LogRotator">
+                <daysToKeep>7</daysToKeep>
+                <numToKeep>50</numToKeep>
+                <artifactDaysToKeep>7</artifactDaysToKeep>
+                <artifactNumToKeep>10</artifactNumToKeep>
+                <removeLastBuild>false</removeLastBuild>
+            </strategy>
+        </jenkins.model.BuildDiscarderProperty>
+
+        <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.13.1.1-SNAPSHOT"/>
+
+        <hudson.model.ParametersDefinitionProperty>
+
+            <parameterDefinitions>
+
+                <hudson.model.ChoiceParameterDefinition>
+                    <name>environment</name>
+                    <choices>
+                        <string>ENVIRONMENT_A</string>
+                        <string>ENVIRONMENT_B</string>
+                        <string>ENVIRONMENT_C</string>
+                        <string>ENVIRONMENT_D</string>
+                        <string>ENVIRONMENT_E</string>
+                        <string>ENVIRONMENT_F</string>
+                        <string>ENVIRONMENT_G</string>
+                        <string>ENVIRONMENT_H</string>
+                        <string>ENVIRONMENT_I</string>
+                        <string>ENVIRONMENT_J</string>
+                    </choices>
+                </hudson.model.ChoiceParameterDefinition>
+
+                <hudson.model.ChoiceParameterDefinition>
+                    <name>action</name>
+                    <description>0 - Stop workloads, 1 - Start workloads</description>
+                    <choices>
+                        <string>0</string>
+                        <string>1</string>
+                    </choices>
+                </hudson.model.ChoiceParameterDefinition>
+
+                <hudson.model.ChoiceParameterDefinition>
+                    <name>dryRun</name>
+                    <description>true - Preview changes only, without applying them</description>
+                    <choices>
+                        <string>false</string>
+                        <string>true</string>
+                    </choices>
+                </hudson.model.ChoiceParameterDefinition>
+
+                <hudson.model.StringParameterDefinition>
+                    <name>username</name>
+                    <description>Username</description>
+                    <trim>false</trim>
+                </hudson.model.StringParameterDefinition>
+
+                <hudson.model.PasswordParameterDefinition>
+                    <name>password</name>
+                    <description>Password</description>
+                    <defaultValue>********</defaultValue>
+                </hudson.model.PasswordParameterDefinition>
+
+            </parameterDefinitions>
+
+        </hudson.model.ParametersDefinitionProperty>
+
+    </properties>
+
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@4007.vd705fc76a_34e">
+
+        <scm class="hudson.plugins.git.GitSCM" plugin="git@5.7.0">
+
+            <configVersion>2</configVersion>
+
+            <userRemoteConfigs>
+                <hudson.plugins.git.UserRemoteConfig>
+                    <url>ssh://git@example.com/organization/openshift-workload-scaler.git</url>
+                    <credentialsId>ssh_credentials</credentialsId>
+                </hudson.plugins.git.UserRemoteConfig>
+            </userRemoteConfigs>
+
+            <branches>
+                <hudson.plugins.git.BranchSpec>
+                    <name>main</name>
+                </hudson.plugins.git.BranchSpec>
+            </branches>
+
+            <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+
+            <gitTool>git</gitTool>
+
+            <submoduleCfg class="empty-list"/>
+
+            <extensions/>
+
+        </scm>
+
+        <scriptPath>pipelines/ManageWorkloads</scriptPath>
+
+        <lightweight>true</lightweight>
+
+    </definition>
+
+    <triggers/>
+
+    <disabled>false</disabled>
+
+</flow-definition>
